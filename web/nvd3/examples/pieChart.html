@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link href="../src/nv.d3.css" rel="stylesheet" type="text/css">
+<style>
+
+body {
+  overflow-y:scroll;
+}
+
+text {
+  font: 12px sans-serif;
+}
+
+.mypiechart {
+  height: 400px;
+    width: 500px;
+  border: 2px;
+}
+</style>
+<body>
+
+<h2>Test1</h2>
+<svg id="test1" class="mypiechart"></svg>
+
+<script src="../lib/d3.v2.js"></script>
+<script src="../nv.d3.js"></script>
+<script src="../src/models/legend.js"></script>
+<script src="../src/models/pie.js"></script>
+<script src="../src/models/pieChart.js"></script>
+<script src="../src/utils.js"></script>
+<script>
+
+  var testdata = [
+    {
+      key: "strong positive",
+      y:10,
+      color:"green"
+    },
+    {
+      key: "positive",
+      y: 2,
+      color:"yellow"
+    },
+    {
+      key: "netural",
+      y: 9,
+      color:"gray"
+    },
+    {
+      key: "negative",
+      y: 7,
+      color:"pink"
+    },
+    {
+      key: "strong negative",
+      y: 4,
+      color:"red"
+    }
+  ];
+
+
+nv.addGraph(function() {
+    var width = 500,
+        height = 400;
+
+    var chart = nv.models.pieChart()
+        .x(function(d) { return d.key })
+        .y(function(d) { return d.y })
+        //.showLabels(false)
+        .values(function(d) { return d })
+        .color(function(d){return d.color;})
+        .width(width)
+        .height(height);
+
+      d3.select("#test1")
+          .datum([testdata])
+        .transition().duration(1200)
+          .attr('width', width)
+          .attr('height', height)
+          .call(chart);
+
+    chart.dispatch.on('stateChange', function(e) { nv.log('New State:', JSON.stringify(e)); });
+
+    return chart;
+});
+
+</script>
